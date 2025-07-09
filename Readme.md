@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Александр Масленников](https://up.htmlacademy.ru/javascript-individual/2/user/1866133).
-* Наставник: `Неопознанный Енот`.
+* Наставник: [Алексей Хапов](https://htmlacademy.ru/profile/id118459).
 * Рабочий проект: [Кекстаграм](https://seovoodoo.github.io/1866133-kekstagram-2/)
 
 ---
