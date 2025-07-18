@@ -1,3 +1,29 @@
+// Задание 5.16
+
+const isTimeEnough = (...data) => {
+  const duration = data.at(-1);
+  const times = [...data.slice(0, data.length - 1)]
+    .map((time) => time.split(':')
+      .map((str, index) => index === 0 ? Number(str) : Number(str) / 60)
+      .reduce((sum, num) => sum + num, 0));
+
+  const [startWorkDay, endWorkDay, startMeeting] = times;
+
+  if (startMeeting < startWorkDay) {
+    return false;
+  }
+
+  return (startMeeting + duration / 60) <= endWorkDay;
+};
+
+
+window.console.log('Ожидаем true, получаем - ', isTimeEnough('08:00', '17:30', '14:00', 90)); // true
+window.console.log('Ожидаем true, получаем - ', isTimeEnough('8:00', '10:0', '8:0', 120)); // true
+window.console.log('Ожидаем false, получаем - ', isTimeEnough('08:00', '14:30', '14:00', 90)); // false
+window.console.log('Ожидаем false, получаем - ', isTimeEnough('14:00', '17:30', '08:0', 90)); // false
+window.console.log('Ожидаем false, получаем - ', isTimeEnough('8:00', '17:30', '08:00', 900)); // false
+
+
 // // Задача №1
 // const isNormalLength = (str, maxlength) => str.length <= maxlength;
 
