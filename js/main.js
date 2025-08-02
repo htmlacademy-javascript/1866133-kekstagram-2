@@ -1,3 +1,3 @@
-import { fotos } from './data.js';
+import { photos } from './data.js';
 
-window.console.table('Моковые данные', fotos());
+window.console.table('Моковые данные', photos());
