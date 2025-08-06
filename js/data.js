@@ -1,4 +1,4 @@
-import { getRandomInteger, createUniqueIdFromRangeGenerator } from './util.js';
+import { getRandomInteger, createUniqueIdFromRangeGenerator } from './utils.js';
 
 const MESSAGES = [
   'Всё отлично!',
@@ -74,6 +74,6 @@ const createFotoDescription = () => {
   };
 };
 
-const photos = () => Array.from({ length: COUNT_PHOTOS }, createFotoDescription);
+const photos = Array.from({ length: COUNT_PHOTOS }, createFotoDescription);
 
 export { photos };
