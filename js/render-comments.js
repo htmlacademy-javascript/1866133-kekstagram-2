@@ -1,10 +1,12 @@
+const COMMENTS_STEP = 5;
+
 const bigPicture = document.querySelector('.big-picture');
 const shownCommentsCount = bigPicture.querySelector('.social__comment-shown-count');
 const commentsList = bigPicture.querySelector('.social__comments');
 const showCommentsMoreBtn = bigPicture.querySelector('.comments-loader');
 
-const COMMENTS_STEP = 5;
-let renderedCommentsCount = 0; // вспомогательный счетчик отрисованных комментариев
+// вспомогательный счетчик отрисованных комментариев
+let renderedCommentsCount = 0;
 let allComments = [];
 
 const clearComments = () => {
@@ -28,8 +30,8 @@ const renderComments = (comments) => {
   // новая пачка комментариев для отрисовки
   const currentCommentsBunch = comments.slice(renderedCommentsCount, renderedCommentsCount + COMMENTS_STEP);
 
-  const htmlTpl = currentCommentsBunch.reduce((accum, comment) => `${accum}` +
-      `<li class="social__comment">
+  const htmlTpl = currentCommentsBunch.reduce((accum, comment) => `${accum}
+      <li class="social__comment">
         <img class="social__picture" src="${comment.avatar}" alt="${comment.name}" width="35" height="35">
         <p class="social__text">${comment.message}</p>
       </li>`, '');
