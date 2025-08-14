@@ -1,5 +1,5 @@
 import { photos } from './data.js';
-import { renderComments, clearComments } from './renderComments.js';
+import { renderComments, clearComments } from './render-comments.js';
 import { isEscapeKey } from './utils.js';
 
 const body = document.querySelector('body');
