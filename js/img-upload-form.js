@@ -1,31 +1,27 @@
-import { isEscapeKey } from '/js/utils.js';
-import { hashtagValidator, descriptionValidator, getErrorMessage } from '/js/validators.js';
+import { isEscapeKey } from './utils.js';
+import { pristine } from './validation.js';
+import './effects.js';
 
-const DESCRIPTION_MAX_LENGTH = 140;
+
+const SCALE_SETTINGS = {
+  max: 100,
+  min: 25,
+  step: 25
+};
 
 const body = document.querySelector('body');
 const imageUploadForm = document.querySelector('.img-upload__form');
-const imageUploadInput = imageUploadForm.querySelector('.img-upload__input'); // uploadImageControl
-const imageEditorForm = imageUploadForm.querySelector('.img-upload__overlay'); //imageEditorForm
+const imageUploadInput = imageUploadForm.querySelector('.img-upload__input');
+const imageEditorForm = imageUploadForm.querySelector('.img-upload__overlay');
 const closeImageEditorBtn = imageEditorForm.querySelector('.img-upload__cancel');
 const hashtagInput = imageEditorForm.querySelector('.text__hashtags');
 const hashtagDescription = imageEditorForm.querySelector('.text__description');
 
-const configPristine = {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error',
-};
+const downSizeBtn = imageEditorForm.querySelector('.scale__control--smaller');
+const increaseSizeBtn = imageEditorForm.querySelector('.scale__control--bigger');
+const scaleControl = imageEditorForm.querySelector('.scale__control--value');
+const previewPhoto = imageEditorForm.querySelector('.img-upload__preview > img');
 
-const formAttribute = {
-  method: 'POST',
-  enctype: 'multipart/form-data',
-  action: 'https://31.javascript.htmlacademy.pro/kekstagram'
-};
-
-for (const key in formAttribute) {
-  imageUploadForm.setAttribute(key, formAttribute[key]);
-}
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt) && hashtagInput !== document.activeElement && hashtagDescription !== document.activeElement) {
@@ -34,29 +30,57 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
+const onCloseImageEditorBtnClick = () => closeImageEditorModal();
+
+// Масштаб изображения НАЧАЛО
+const resizePhoto = (val) => {
+  previewPhoto.style.transform = `scale(${parseInt(val, 10) / 100})`;
+};
+
+const getScaleValue = () => parseInt(scaleControl.value, 10);
+
+const onDownSizeBtnClick = () => {
+  const scaleValue = getScaleValue();
+  if(scaleValue > SCALE_SETTINGS.min) {
+    scaleControl.value = `${scaleValue - SCALE_SETTINGS.step}%`;
+  }
+  resizePhoto(scaleControl.value);
+};
+
+const onIncreaseSizeBtnClick = () => {
+  const scaleValue = getScaleValue();
+  if(scaleValue < SCALE_SETTINGS.max) {
+    scaleControl.value = `${scaleValue + SCALE_SETTINGS.step}%`;
+  }
+  resizePhoto(scaleControl.value);
+};
+
+const resetPhotoScale = () => {
+  previewPhoto.style.transform = 'scale(1)';
+  downSizeBtn.removeEventListener('click', onDownSizeBtnClick);
+  increaseSizeBtn.removeEventListener('click', onIncreaseSizeBtnClick);
+};
+// Масштаб изображения КОНЕЦ
+
 imageUploadInput.addEventListener('change', () => {
   imageEditorForm.classList.remove('hidden');
   body.classList.add('modal-open');
 
+  downSizeBtn.addEventListener('click', onDownSizeBtnClick);
+  increaseSizeBtn.addEventListener('click', onIncreaseSizeBtnClick);
   document.addEventListener('keydown', onDocumentKeydown);
-  closeImageEditorBtn.addEventListener('click', () => closeImageEditorModal());
+  closeImageEditorBtn.addEventListener('click', onCloseImageEditorBtnClick);
 });
-
-
-const pristine = new Pristine(imageUploadForm, configPristine);
-
-pristine.addValidator(hashtagInput, hashtagValidator, getErrorMessage);
-pristine.addValidator(hashtagDescription, descriptionValidator, `Максимальная длина ${DESCRIPTION_MAX_LENGTH} символов`);
 
 function closeImageEditorModal() {
   imageUploadForm.reset();
   pristine.reset();
+  resetPhotoScale();
   imageEditorForm.classList.add('hidden');
   body.classList.remove('modal-open');
-  imageUploadInput.value = ''; // сброс значения поля выбора файла
 
   document.removeEventListener('keydown', onDocumentKeydown);
-  closeImageEditorBtn.removeEventListener('click', () => closeImageEditorModal());
+  closeImageEditorBtn.removeEventListener('click', onCloseImageEditorBtnClick);
 }
 
 imageUploadForm.addEventListener('submit', (evt) => {
@@ -68,4 +92,4 @@ imageUploadForm.addEventListener('submit', (evt) => {
   }
 });
 
-export { DESCRIPTION_MAX_LENGTH };
+export { imageUploadForm, hashtagInput, hashtagDescription };
