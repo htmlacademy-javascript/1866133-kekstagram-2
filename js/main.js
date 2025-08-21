@@ -1,7 +1,9 @@
 import { photos } from './data.js';
 import { createThumbnail } from './thumbnails.js';
 import { openBigPictureModal } from './open-big-picture.js';
+import './validation.js';
 import './img-upload-form.js';
+
 
 const picturesContainer = document.querySelector('.pictures');
 const fragment = document.createDocumentFragment();

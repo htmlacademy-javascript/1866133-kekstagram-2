@@ -1,5 +1,14 @@
+import { imageUploadForm, hashtagInput, hashtagDescription } from './img-upload-form.js';
+
 const HASHTAG_MAX_LENGTH = 20;
 const HASHTAG_MAX_QUANTITY = 5;
+const DESCRIPTION_MAX_LENGTH = 140;
+
+const configPristine = {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error',
+};
 
 const validationSchema = [
   {
@@ -32,4 +41,34 @@ const validationSchema = [
   }
 ];
 
-export { validationSchema };
+let errorMessage = '';
+const getErrorMessage = () => errorMessage;
+
+const hashtagValidator = (value) => {
+
+  if(value.trim().length === 0) {
+    return true;
+  }
+
+  const hashtags = value.trim().toLowerCase().split(/\s+/);
+
+  const checkHashtags = validationSchema.every((currentSchema) => {
+    const isValide = currentSchema.rule(hashtags);
+    if (isValide) {
+      return true;
+    } else {
+      errorMessage = currentSchema.message;
+      return false;
+    }
+  });
+
+  return checkHashtags;
+};
+
+const descriptionValidator = (value) => value.length <= DESCRIPTION_MAX_LENGTH;
+
+const pristine = new Pristine(imageUploadForm, configPristine);
+pristine.addValidator(hashtagInput, hashtagValidator, getErrorMessage);
+pristine.addValidator(hashtagDescription, descriptionValidator, `Максимальная длина ${DESCRIPTION_MAX_LENGTH} символов`);
+
+export { pristine };
