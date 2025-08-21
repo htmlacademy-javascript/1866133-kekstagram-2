@@ -49,10 +49,10 @@ const FUNCTION_FILTER_CSS = {
   'heat': (val) => `brightness(${val})`
 };
 
-const effectContainer = document.querySelector('.img-upload__effect-level');
+const form = document.querySelector('#upload-select-image');
+const effectContainer = form.querySelector('.img-upload__effect-level');
 const sliderElement = effectContainer.querySelector('.effect-level__slider');
 const effectValueInput = effectContainer.querySelector('.effect-level__value');
-const effectsList = document.querySelector('.effects__list');
 const previewPhoto = document.querySelector('.img-upload__preview > img');
 
 
@@ -79,11 +79,11 @@ sliderElement.noUiSlider.on('update', () => {
   previewPhoto.style.filter = currentEffect === 'none' ? '' : FUNCTION_FILTER_CSS[currentEffect](effectValueInput.value);
 });
 
-effectsList.addEventListener('click', () => {
-  currentEffect = effectsList.querySelector('input[name="effect"]:checked').value;
+form.addEventListener('change', () => {
+  currentEffect = form.effect.value;
 
   if (currentEffect === 'none') {
-    previewPhoto.style.filter = '';
+    previewPhoto.style = '';
     effectValueInput.value = null;
     effectContainer.classList.add('hidden');
 

@@ -10,8 +10,8 @@ const SCALE_SETTINGS = {
 };
 
 const body = document.querySelector('body');
-const imageUploadForm = document.querySelector('.img-upload__form');
-const imageUploadInput = imageUploadForm.querySelector('.img-upload__input');
+const imageUploadForm = document.querySelector('#upload-select-image');
+const imageUploadInput = imageUploadForm.querySelector('#upload-file');
 const imageEditorForm = imageUploadForm.querySelector('.img-upload__overlay');
 const closeImageEditorBtn = imageEditorForm.querySelector('.img-upload__cancel');
 const hashtagInput = imageEditorForm.querySelector('.text__hashtags');
@@ -39,48 +39,48 @@ const resizePhoto = (val) => {
 
 const getScaleValue = () => parseInt(scaleControl.value, 10);
 
-const onDownSizeBtnClick = () => {
+const changeScale = (delta) => {
+
   const scaleValue = getScaleValue();
-  if(scaleValue > SCALE_SETTINGS.min) {
-    scaleControl.value = `${scaleValue - SCALE_SETTINGS.step}%`;
+  const newValue = scaleValue + SCALE_SETTINGS.step * delta;
+
+  if(newValue >= SCALE_SETTINGS.min
+     && newValue <= SCALE_SETTINGS.max) {
+    scaleControl.value = `${newValue}%`;
   }
+
   resizePhoto(scaleControl.value);
+};
+
+const onDownSizeBtnClick = () => {
+  changeScale(-1);
 };
 
 const onIncreaseSizeBtnClick = () => {
-  const scaleValue = getScaleValue();
-  if(scaleValue < SCALE_SETTINGS.max) {
-    scaleControl.value = `${scaleValue + SCALE_SETTINGS.step}%`;
-  }
-  resizePhoto(scaleControl.value);
+  changeScale(1);
 };
 
-const resetPhotoScale = () => {
-  previewPhoto.style.transform = 'scale(1)';
-  downSizeBtn.removeEventListener('click', onDownSizeBtnClick);
-  increaseSizeBtn.removeEventListener('click', onIncreaseSizeBtnClick);
-};
+downSizeBtn.addEventListener('click', onDownSizeBtnClick);
+increaseSizeBtn.addEventListener('click', onIncreaseSizeBtnClick);
 // Масштаб изображения КОНЕЦ
+
+closeImageEditorBtn.addEventListener('click', onCloseImageEditorBtnClick);
 
 imageUploadInput.addEventListener('change', () => {
   imageEditorForm.classList.remove('hidden');
   body.classList.add('modal-open');
 
-  downSizeBtn.addEventListener('click', onDownSizeBtnClick);
-  increaseSizeBtn.addEventListener('click', onIncreaseSizeBtnClick);
   document.addEventListener('keydown', onDocumentKeydown);
-  closeImageEditorBtn.addEventListener('click', onCloseImageEditorBtnClick);
 });
 
 function closeImageEditorModal() {
   imageUploadForm.reset();
   pristine.reset();
-  resetPhotoScale();
+
   imageEditorForm.classList.add('hidden');
   body.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onDocumentKeydown);
-  closeImageEditorBtn.removeEventListener('click', onCloseImageEditorBtnClick);
 }
 
 imageUploadForm.addEventListener('submit', (evt) => {
