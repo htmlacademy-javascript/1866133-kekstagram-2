@@ -77,7 +77,7 @@ noUiSlider.create(sliderElement, {
 
 sliderElement.noUiSlider.on('update', () => {
   effectValueInput.value = sliderElement.noUiSlider.get();
-  window.console.log('Значение слайдера', effectValueInput.value);
+
   previewPhoto.style.filter = currentEffect === 'none' ? '' : FunctionFilterCss[currentEffect](effectValueInput.value);
 });
 
