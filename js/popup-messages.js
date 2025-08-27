@@ -52,7 +52,7 @@ const showNotification = (notificationType) => {
 
 function removeNotification() {
   notificationElement.remove();
-  closeNotificationButton.addEventListener('click', onCloseNotificationButtonClick);
+  closeNotificationButton.removeEventListener('click', onCloseNotificationButtonClick);
   document.removeEventListener('keydown', onDocumentKeydown);
   document.removeEventListener('click', onDocumentClick);
 }
