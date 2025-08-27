@@ -1,8 +1,12 @@
-import { imageUploadForm, hashtagInput, hashtagDescription } from './img-upload-form.js';
+//import { imageUploadForm, hashtagInput, hashtagDescription } from './img-upload-form.js';
 
 const HASHTAG_MAX_LENGTH = 20;
 const HASHTAG_MAX_QUANTITY = 5;
 const DESCRIPTION_MAX_LENGTH = 140;
+
+const imageUploadForm = document.querySelector('#upload-select-image');
+const hashtagInput = imageUploadForm.querySelector('.text__hashtags');
+const hashtagDescription = imageUploadForm.querySelector('.text__description');
 
 const configPristine = {
   classTo: 'img-upload__field-wrapper',

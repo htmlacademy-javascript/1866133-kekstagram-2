@@ -1,4 +1,4 @@
-import { photos } from './data.js';
+import { photosApi as photos } from './main.js';
 import { renderComments, clearComments } from './render-comments.js';
 import { isEscapeKey } from './utils.js';
 

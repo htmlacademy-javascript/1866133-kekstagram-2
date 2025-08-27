@@ -1,4 +1,4 @@
-const EFFECTS_SETTINGS = {
+const EffectsSettings = {
   chrome: {
     range: {
       min: 0,
@@ -41,7 +41,7 @@ const EFFECTS_SETTINGS = {
   }
 };
 
-const FUNCTION_FILTER_CSS = {
+const FunctionFilterCss = {
   'chrome': (val) => `grayscale(${val})`,
   'sepia': (val) => `sepia(${val})`,
   'marvin': (val) => `invert(${val}%)`,
@@ -50,6 +50,7 @@ const FUNCTION_FILTER_CSS = {
 };
 
 const form = document.querySelector('#upload-select-image');
+const effectsList = form.querySelector('.effects__list');
 const effectContainer = form.querySelector('.img-upload__effect-level');
 const sliderElement = effectContainer.querySelector('.effect-level__slider');
 const effectValueInput = effectContainer.querySelector('.effect-level__value');
@@ -76,10 +77,11 @@ noUiSlider.create(sliderElement, {
 
 sliderElement.noUiSlider.on('update', () => {
   effectValueInput.value = sliderElement.noUiSlider.get();
-  previewPhoto.style.filter = currentEffect === 'none' ? '' : FUNCTION_FILTER_CSS[currentEffect](effectValueInput.value);
+  window.console.log('Значение слайдера', effectValueInput.value);
+  previewPhoto.style.filter = currentEffect === 'none' ? '' : FunctionFilterCss[currentEffect](effectValueInput.value);
 });
 
-form.addEventListener('change', () => {
+effectsList.addEventListener('change', () => {
   currentEffect = form.effect.value;
 
   if (currentEffect === 'none') {
@@ -89,6 +91,6 @@ form.addEventListener('change', () => {
 
   } else {
     effectContainer.classList.remove('hidden');
-    sliderElement.noUiSlider.updateOptions(EFFECTS_SETTINGS[currentEffect]);
+    sliderElement.noUiSlider.updateOptions(EffectsSettings[currentEffect]);
   }
 });
