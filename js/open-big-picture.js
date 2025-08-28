@@ -1,4 +1,4 @@
-import { photosApi as photos } from './main.js';
+//import { photosApi as photos } from './main.js';
 import { renderComments, clearComments } from './render-comments.js';
 import { isEscapeKey } from './utils.js';
 
@@ -9,6 +9,8 @@ const likesCount = bigPicture.querySelector('.likes-count');
 const socialCaption = bigPicture.querySelector('.social__caption');
 const commentsTotalCount = bigPicture.querySelector('.social__comment-total-count');
 const closeBigPictureBtn = bigPicture.querySelector('.big-picture__cancel');
+
+let photos = [];
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -36,7 +38,8 @@ const renderFullPhoto = (imageId) => {
   renderComments(currentPhoto.comments);
 };
 
-function openBigPictureModal (imageId) {
+function openBigPictureModal (imageId, photosData) {
+  photos = photosData;
   body.classList.add('modal-open');
   bigPicture.classList.remove('hidden');
   renderFullPhoto(imageId);

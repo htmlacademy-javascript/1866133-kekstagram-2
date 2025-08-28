@@ -6,12 +6,12 @@ import './validation.js';
 import { showNotification } from './popup-messages.js';
 
 
-let photosApi = [];
+let photosData = [];
 
 getPhotos()
-  .then((photos) => {
-    photosApi = JSON.parse(JSON.stringify(photos));
-    renderThumbinals(photosApi);
+  .then((data) => {
+    photosData = JSON.parse(JSON.stringify(data));
+    renderThumbinals(photosData);
   })
   .catch(
     () => {
@@ -25,8 +25,6 @@ picturesContainer.addEventListener('click', (evt) => {
 
   if (currentThumbnail) {
     evt.preventDefault();
-    openBigPictureModal(currentThumbnail.dataset.imageId);
+    openBigPictureModal(currentThumbnail.dataset.imageId, photosData);
   }
 });
-
-export { photosApi };

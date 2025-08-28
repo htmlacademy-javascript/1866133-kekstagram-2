@@ -5,7 +5,7 @@ import './effects.js';
 import { showNotification } from './popup-messages.js';
 
 
-const SCALE_SETTINGS = {
+const ScaleSettings = {
   max: 100,
   min: 25,
   step: 25
@@ -30,7 +30,7 @@ const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)
     && hashtagInput !== document.activeElement
     && hashtagDescription !== document.activeElement
-    && !body.contains('.error__inner')) {
+    && !body.contains(document.querySelector('.error__inner'))) {
     evt.preventDefault();
     closeImageEditorModal();
   }
@@ -48,10 +48,10 @@ const getScaleValue = () => parseInt(scaleControl.value, 10);
 const changeScale = (delta) => {
 
   const scaleValue = getScaleValue();
-  const newValue = scaleValue + SCALE_SETTINGS.step * delta;
+  const newValue = scaleValue + ScaleSettings.step * delta;
 
-  if (newValue >= SCALE_SETTINGS.min
-    && newValue <= SCALE_SETTINGS.max) {
+  if (newValue >= ScaleSettings.min
+    && newValue <= ScaleSettings.max) {
     scaleControl.value = `${newValue}%`;
   }
 
@@ -80,9 +80,10 @@ imageUploadInput.addEventListener('change', () => {
 });
 
 function closeImageEditorModal() {
+  window.console.log('Зашли в closeImageEditorModal');
   imageUploadForm.reset();
   pristine.reset();
-
+  previewPhoto.style = '';
   imageEditorForm.classList.add('hidden');
   body.classList.remove('modal-open');
 
@@ -97,7 +98,7 @@ const unBlockSubmitBtn = () => {
   submitBtn.disabled = false;
 };
 
-const setUserFormSubmit = (onSacces) => {
+const setUserFormSubmit = () => {
   imageUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValidForm = pristine.validate();
@@ -107,7 +108,7 @@ const setUserFormSubmit = (onSacces) => {
       const formData = new FormData(evt.target);
       sendPhotos(formData)
         .then(() => {
-          onSacces();
+          closeImageEditorModal();
           showNotification('success');
         })
         .catch(() => showNotification('error'))
@@ -116,6 +117,6 @@ const setUserFormSubmit = (onSacces) => {
   });
 };
 
-setUserFormSubmit(closeImageEditorModal);
+setUserFormSubmit();
 
 export { imageUploadForm, hashtagInput, hashtagDescription };
