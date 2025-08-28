@@ -1,9 +1,9 @@
 import { findTemplate } from './dom.js';
 
-
+const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = findTemplate('picture');
 
-const createThumbnail = ({id, url, description, likes, comments}) => {
+const createThumbnail = ({ id, url, description, likes, comments }) => {
 
   const thumbnail = pictureTemplate.cloneNode(true);
   thumbnail.dataset.imageId = id;
@@ -17,4 +17,17 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
   return thumbnail;
 };
 
-export { createThumbnail };
+const renderThumbinals = (photos) => {
+  const fragment = document.createDocumentFragment();
+
+  photos.forEach((photo) => {
+
+    const thumbnail = createThumbnail(photo);
+
+    fragment.appendChild(thumbnail);
+  });
+
+  picturesContainer.appendChild(fragment);
+};
+
+export { renderThumbinals, picturesContainer };

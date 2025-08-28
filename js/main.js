@@ -1,30 +1,32 @@
-import { photos } from './data.js';
-import { createThumbnail } from './thumbnails.js';
+import { getPhotos } from './api.js';
+import { renderThumbinals, picturesContainer } from './thumbnails.js';
 import { openBigPictureModal } from './open-big-picture.js';
-import './validation.js';
 import './img-upload-form.js';
+import './validation.js';
+import { showNotification } from './popup-messages.js';
 
 
-const picturesContainer = document.querySelector('.pictures');
-const fragment = document.createDocumentFragment();
+let photosApi = [];
 
+getPhotos()
+  .then((photos) => {
+    photosApi = JSON.parse(JSON.stringify(photos));
+    renderThumbinals(photosApi);
+  })
+  .catch(
+    () => {
+      showNotification('data-error');
+    }
+  );
 
-photos.forEach((photo) => {
-
-  const thumbnail = createThumbnail(photo);
-
-  fragment.appendChild(thumbnail);
-
-});
-
-picturesContainer.appendChild(fragment);
 
 picturesContainer.addEventListener('click', (evt) => {
   const currentThumbnail = evt.target.closest('.picture');
 
-  if(currentThumbnail) {
+  if (currentThumbnail) {
     evt.preventDefault();
     openBigPictureModal(currentThumbnail.dataset.imageId);
   }
 });
 
+export { photosApi };
