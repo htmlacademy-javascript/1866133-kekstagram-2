@@ -2,6 +2,7 @@ import { sendPhotos } from './api.js';
 import { isEscapeKey } from './utils.js';
 import { pristine } from './validation.js';
 import './effects.js';
+import { effectContainer } from './effects.js';
 import { showNotification } from './popup-messages.js';
 
 
@@ -80,10 +81,10 @@ imageUploadInput.addEventListener('change', () => {
 });
 
 function closeImageEditorModal() {
-  window.console.log('Зашли в closeImageEditorModal');
   imageUploadForm.reset();
   pristine.reset();
   previewPhoto.style = '';
+  effectContainer.classList.add('hidden');
   imageEditorForm.classList.add('hidden');
   body.classList.remove('modal-open');
 
@@ -98,25 +99,21 @@ const unBlockSubmitBtn = () => {
   submitBtn.disabled = false;
 };
 
-const setUserFormSubmit = () => {
-  imageUploadForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    const isValidForm = pristine.validate();
+imageUploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const isValidForm = pristine.validate();
 
-    if (isValidForm) {
-      blockSubmitBtn();
-      const formData = new FormData(evt.target);
-      sendPhotos(formData)
-        .then(() => {
-          closeImageEditorModal();
-          showNotification('success');
-        })
-        .catch(() => showNotification('error'))
-        .finally(unBlockSubmitBtn);
-    }
-  });
-};
-
-setUserFormSubmit();
+  if (isValidForm) {
+    blockSubmitBtn();
+    const formData = new FormData(evt.target);
+    sendPhotos(formData)
+      .then(() => {
+        closeImageEditorModal();
+        showNotification('success');
+      })
+      .catch(() => showNotification('error'))
+      .finally(unBlockSubmitBtn);
+  }
+});
 
 export { imageUploadForm, hashtagInput, hashtagDescription };

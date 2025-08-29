@@ -10,7 +10,7 @@ const NotificationHtml = {
   'success': findTemplate('success').cloneNode(true),
 };
 
-let notificationElement = null;
+let notification = null;
 let closeNotificationButton = null;
 
 const onDocumentKeydown = (evt) => {
@@ -21,37 +21,61 @@ const onDocumentKeydown = (evt) => {
 };
 
 const onDocumentClick = (evt) => {
-  if (evt.target === notificationElement) {
+  if (evt.target === notification) {
     removeNotification();
   }
 };
 
 const onCloseNotificationButtonClick = () => removeNotification();
 
+const addListener = () => {
+  closeNotificationButton.addEventListener('click', onCloseNotificationButtonClick);
+  document.addEventListener('keydown', onDocumentKeydown);
+  document.addEventListener('click', onDocumentClick);
+};
+
 
 const showNotification = (notificationType) => {
 
-  notificationElement = NotificationHtml[notificationType];
+  notification = NotificationHtml[notificationType];
 
-  document.body.appendChild(notificationElement);
+  document.body.appendChild(notification);
 
-  if (notificationType === 'data-error') {
+  switch (notificationType) {
+    case 'data-error':
+      setTimeout(() => {
+        notification.remove();
+      }, ALERT_SHOW_TIME);
+      break;
 
-    setTimeout(() => {
-      notificationElement.remove();
-    }, ALERT_SHOW_TIME);
-
-  } else {
-    closeNotificationButton = notificationElement.querySelector('.error__button') || notificationElement.querySelector('.success__button');
-
-    closeNotificationButton.addEventListener('click', onCloseNotificationButtonClick);
-    document.addEventListener('keydown', onDocumentKeydown);
-    document.addEventListener('click', onDocumentClick);
+    case 'error': {
+      closeNotificationButton = notification.querySelector('.error__button');
+      addListener();
+    }
+      break;
+    default: {
+      closeNotificationButton = notification.querySelector('.success__button');
+      addListener();
+    }
   }
+
+  // if (notificationType === 'data-error') {
+
+  //   setTimeout(() => {
+  //     notification.remove();
+  //   }, ALERT_SHOW_TIME);
+
+  // } else {
+  //   closeNotificationButton = notification.querySelector('.error__button') || notification.querySelector('.success__button');
+
+  //   closeNotificationButton.addEventListener('click', onCloseNotificationButtonClick);
+  //   document.addEventListener('keydown', onDocumentKeydown);
+  //   document.addEventListener('click', onDocumentClick);
+  // }
 };
 
 function removeNotification() {
-  notificationElement.remove();
+  notification.remove();
   closeNotificationButton.removeEventListener('click', onCloseNotificationButtonClick);
   document.removeEventListener('keydown', onDocumentKeydown);
   document.removeEventListener('click', onDocumentClick);
