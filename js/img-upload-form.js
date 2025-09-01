@@ -2,10 +2,11 @@ import { sendPhotos } from './api.js';
 import { isEscapeKey } from './utils.js';
 import { pristine } from './validation.js';
 import './effects.js';
+import { effectContainer } from './effects.js';
 import { showNotification } from './popup-messages.js';
 
 
-const SCALE_SETTINGS = {
+const ScaleSettings = {
   max: 100,
   min: 25,
   step: 25
@@ -30,7 +31,7 @@ const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)
     && hashtagInput !== document.activeElement
     && hashtagDescription !== document.activeElement
-    && !body.contains('.error__inner')) {
+    && !body.contains(document.querySelector('.error__inner'))) {
     evt.preventDefault();
     closeImageEditorModal();
   }
@@ -48,10 +49,10 @@ const getScaleValue = () => parseInt(scaleControl.value, 10);
 const changeScale = (delta) => {
 
   const scaleValue = getScaleValue();
-  const newValue = scaleValue + SCALE_SETTINGS.step * delta;
+  const newValue = scaleValue + ScaleSettings.step * delta;
 
-  if (newValue >= SCALE_SETTINGS.min
-    && newValue <= SCALE_SETTINGS.max) {
+  if (newValue >= ScaleSettings.min
+    && newValue <= ScaleSettings.max) {
     scaleControl.value = `${newValue}%`;
   }
 
@@ -82,7 +83,8 @@ imageUploadInput.addEventListener('change', () => {
 function closeImageEditorModal() {
   imageUploadForm.reset();
   pristine.reset();
-
+  previewPhoto.style = '';
+  effectContainer.classList.add('hidden');
   imageEditorForm.classList.add('hidden');
   body.classList.remove('modal-open');
 
@@ -97,25 +99,21 @@ const unBlockSubmitBtn = () => {
   submitBtn.disabled = false;
 };
 
-const setUserFormSubmit = (onSacces) => {
-  imageUploadForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    const isValidForm = pristine.validate();
+imageUploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const isValidForm = pristine.validate();
 
-    if (isValidForm) {
-      blockSubmitBtn();
-      const formData = new FormData(evt.target);
-      sendPhotos(formData)
-        .then(() => {
-          onSacces();
-          showNotification('success');
-        })
-        .catch(() => showNotification('error'))
-        .finally(unBlockSubmitBtn);
-    }
-  });
-};
-
-setUserFormSubmit(closeImageEditorModal);
+  if (isValidForm) {
+    blockSubmitBtn();
+    const formData = new FormData(evt.target);
+    sendPhotos(formData)
+      .then(() => {
+        closeImageEditorModal();
+        showNotification('success');
+      })
+      .catch(() => showNotification('error'))
+      .finally(unBlockSubmitBtn);
+  }
+});
 
 export { imageUploadForm, hashtagInput, hashtagDescription };

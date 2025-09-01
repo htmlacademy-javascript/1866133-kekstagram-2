@@ -1,17 +1,17 @@
 import { getPhotos } from './api.js';
-import { renderThumbinals, picturesContainer } from './thumbnails.js';
+import { picturesContainer } from './thumbnails.js';
 import { openBigPictureModal } from './open-big-picture.js';
 import './img-upload-form.js';
 import './validation.js';
+import { filters } from './filters.js';
 import { showNotification } from './popup-messages.js';
 
-
-let photosApi = [];
+let photosData = [];
 
 getPhotos()
-  .then((photos) => {
-    photosApi = JSON.parse(JSON.stringify(photos));
-    renderThumbinals(photosApi);
+  .then((data) => {
+    photosData = JSON.parse(JSON.stringify(data));
+    filters(photosData);
   })
   .catch(
     () => {
@@ -25,8 +25,6 @@ picturesContainer.addEventListener('click', (evt) => {
 
   if (currentThumbnail) {
     evt.preventDefault();
-    openBigPictureModal(currentThumbnail.dataset.imageId);
+    openBigPictureModal(currentThumbnail.dataset.imageId, photosData);
   }
 });
-
-export { photosApi };

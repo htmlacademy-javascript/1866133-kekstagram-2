@@ -94,3 +94,5 @@ effectsList.addEventListener('change', () => {
     sliderElement.noUiSlider.updateOptions(EffectsSettings[currentEffect]);
   }
 });
+
+export { effectContainer };
