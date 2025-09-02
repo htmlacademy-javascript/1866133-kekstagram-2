@@ -1,5 +1,3 @@
-//import { imageUploadForm, hashtagInput, hashtagDescription } from './img-upload-form.js';
-
 const HASHTAG_MAX_LENGTH = 20;
 const HASHTAG_MAX_QUANTITY = 5;
 const DESCRIPTION_MAX_LENGTH = 140;
@@ -75,4 +73,4 @@ const pristine = new Pristine(imageUploadForm, configPristine);
 pristine.addValidator(hashtagInput, hashtagValidator, getErrorMessage);
 pristine.addValidator(hashtagDescription, descriptionValidator, `Максимальная длина ${DESCRIPTION_MAX_LENGTH} символов`);
 
-export { pristine };
+export { imageUploadForm, hashtagInput, hashtagDescription, pristine };

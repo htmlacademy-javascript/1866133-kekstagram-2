@@ -58,20 +58,6 @@ const showNotification = (notificationType) => {
       addListener();
     }
   }
-
-  // if (notificationType === 'data-error') {
-
-  //   setTimeout(() => {
-  //     notification.remove();
-  //   }, ALERT_SHOW_TIME);
-
-  // } else {
-  //   closeNotificationButton = notification.querySelector('.error__button') || notification.querySelector('.success__button');
-
-  //   closeNotificationButton.addEventListener('click', onCloseNotificationButtonClick);
-  //   document.addEventListener('keydown', onDocumentKeydown);
-  //   document.addEventListener('click', onDocumentClick);
-  // }
 };
 
 function removeNotification() {

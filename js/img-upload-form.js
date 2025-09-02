@@ -1,10 +1,11 @@
 import { sendPhotos } from './api.js';
 import { isEscapeKey } from './utils.js';
-import { pristine } from './validation.js';
-import './effects.js';
+import { imageUploadForm, hashtagInput, hashtagDescription, pristine } from './validation.js';
 import { effectContainer } from './effects.js';
+import './effects.js';
 import { showNotification } from './popup-messages.js';
 
+const FILE_TYPES = ['.gif', '.jpg', '.jpeg', '.png', '.webp'];
 
 const ScaleSettings = {
   max: 100,
@@ -13,12 +14,9 @@ const ScaleSettings = {
 };
 
 const body = document.querySelector('body');
-const imageUploadForm = document.querySelector('#upload-select-image');
 const imageUploadInput = imageUploadForm.querySelector('#upload-file');
 const imageEditorForm = imageUploadForm.querySelector('.img-upload__overlay');
 const closeImageEditorBtn = imageEditorForm.querySelector('.img-upload__cancel');
-const hashtagInput = imageEditorForm.querySelector('.text__hashtags');
-const hashtagDescription = imageEditorForm.querySelector('.text__description');
 
 const downSizeBtn = imageEditorForm.querySelector('.scale__control--smaller');
 const increaseSizeBtn = imageEditorForm.querySelector('.scale__control--bigger');
@@ -31,7 +29,7 @@ const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)
     && hashtagInput !== document.activeElement
     && hashtagDescription !== document.activeElement
-    && !body.contains(document.querySelector('.error__inner'))) {
+    && !document.querySelector('.error__inner')) {
     evt.preventDefault();
     closeImageEditorModal();
   }
@@ -77,6 +75,19 @@ imageUploadInput.addEventListener('change', () => {
   imageEditorForm.classList.remove('hidden');
   body.classList.add('modal-open');
 
+  const file = imageUploadInput.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
+
+  if (matches) {
+    previewPhoto.src = URL.createObjectURL(file);
+  } else {
+    closeImageEditorModal();
+    showNotification('error');
+    body.querySelector('.error__title').textContent = 'Неверный формат файла';
+  }
+
   document.addEventListener('keydown', onDocumentKeydown);
 });
 
@@ -115,5 +126,3 @@ imageUploadForm.addEventListener('submit', (evt) => {
       .finally(unBlockSubmitBtn);
   }
 });
-
-export { imageUploadForm, hashtagInput, hashtagDescription };

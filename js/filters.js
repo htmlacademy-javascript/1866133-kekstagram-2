@@ -12,6 +12,7 @@ const ButtonsId = {
 
 const filtersContainer = document.querySelector('.img-filters');
 const filtersForm = document.querySelector('.img-filters__form');
+let activeButton = filtersForm.querySelector(`.${ACTIVE_BUTTON_CLASS_NAME}`);
 
 const clearPhotosContainer = () => {
   const currentPhotos = picturesContainer.querySelectorAll('.picture');
@@ -33,7 +34,7 @@ const filters = (photosData) => {
   filtersContainer.classList.remove('img-filters--inactive');
 
   filtersForm.addEventListener('click', (evt) => {
-    const activeButton = filtersForm.querySelector(`.${ACTIVE_BUTTON_CLASS_NAME}`);
+
     const pressedButton = evt.target.closest('.img-filters__button');
 
     if (!pressedButton || pressedButton === activeButton) {
@@ -42,6 +43,8 @@ const filters = (photosData) => {
 
     activeButton.classList.toggle(ACTIVE_BUTTON_CLASS_NAME);
     pressedButton.classList.toggle(ACTIVE_BUTTON_CLASS_NAME);
+
+    activeButton = pressedButton;
 
     switch (pressedButton.id) {
       case ButtonsId.RANDOM: debounceRender(photosData.toSorted(randomFunc).slice(0, RANDOM_PHOTOS_COUNT));

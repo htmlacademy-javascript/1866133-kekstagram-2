@@ -2,7 +2,6 @@ import { getPhotos } from './api.js';
 import { picturesContainer } from './thumbnails.js';
 import { openBigPictureModal } from './open-big-picture.js';
 import './img-upload-form.js';
-import './validation.js';
 import { filters } from './filters.js';
 import { showNotification } from './popup-messages.js';
 
@@ -18,7 +17,6 @@ getPhotos()
       showNotification('data-error');
     }
   );
-
 
 picturesContainer.addEventListener('click', (evt) => {
   const currentThumbnail = evt.target.closest('.picture');
