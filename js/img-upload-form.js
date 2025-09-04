@@ -17,6 +17,7 @@ const body = document.querySelector('body');
 const imageUploadInput = imageUploadForm.querySelector('#upload-file');
 const imageEditorForm = imageUploadForm.querySelector('.img-upload__overlay');
 const closeImageEditorBtn = imageEditorForm.querySelector('.img-upload__cancel');
+const effectsPreviewIcons = imageEditorForm.querySelectorAll('.effects__preview');
 
 const downSizeBtn = imageEditorForm.querySelector('.scale__control--smaller');
 const increaseSizeBtn = imageEditorForm.querySelector('.scale__control--bigger');
@@ -78,10 +79,13 @@ imageUploadInput.addEventListener('change', () => {
   const file = imageUploadInput.files[0];
   const fileName = file.name.toLowerCase();
 
+
   const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
 
   if (matches) {
-    previewPhoto.src = URL.createObjectURL(file);
+    const path = URL.createObjectURL(file);
+    previewPhoto.src = path;
+    effectsPreviewIcons.forEach((icon) => (icon.style.backgroundImage = `url(${path})`));
   } else {
     closeImageEditorModal();
     showNotification('error');
