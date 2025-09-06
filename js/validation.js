@@ -12,7 +12,7 @@ const configPristine = {
   errorTextClass: 'img-upload__field-wrapper--error',
 };
 
-const validationSchema = [
+const validationSchemas = [
   {
     rule: (hashtags) => hashtags.every((hashtag) => hashtag.startsWith('#')),
     message: 'хэштег должен начинается с символа #'
@@ -46,7 +46,7 @@ const validationSchema = [
 let errorMessage = '';
 const getErrorMessage = () => errorMessage;
 
-const hashtagValidator = (value) => {
+const checkHashtag = (value) => {
 
   if(value.trim().length === 0) {
     return true;
@@ -54,7 +54,7 @@ const hashtagValidator = (value) => {
 
   const hashtags = value.trim().toLowerCase().split(/\s+/);
 
-  const checkHashtags = validationSchema.every((currentSchema) => {
+  const checkHashtags = validationSchemas.every((currentSchema) => {
     const isValide = currentSchema.rule(hashtags);
     if (isValide) {
       return true;
@@ -67,10 +67,10 @@ const hashtagValidator = (value) => {
   return checkHashtags;
 };
 
-const descriptionValidator = (value) => value.length <= DESCRIPTION_MAX_LENGTH;
+const checkDescription = (value) => value.length <= DESCRIPTION_MAX_LENGTH;
 
 const pristine = new Pristine(imageUploadForm, configPristine);
-pristine.addValidator(hashtagInput, hashtagValidator, getErrorMessage);
-pristine.addValidator(hashtagDescription, descriptionValidator, `Максимальная длина ${DESCRIPTION_MAX_LENGTH} символов`);
+pristine.addValidator(hashtagInput, checkHashtag, getErrorMessage);
+pristine.addValidator(hashtagDescription, checkDescription, `Максимальная длина ${DESCRIPTION_MAX_LENGTH} символов`);
 
 export { imageUploadForm, hashtagInput, hashtagDescription, pristine };

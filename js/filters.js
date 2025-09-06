@@ -20,7 +20,7 @@ const clearPhotosContainer = () => {
 };
 
 const compareComments = (photoA, photoB) => photoB.comments.length - photoA.comments.length;
-const randomFunc = () => 0.5 - Math.random();
+const getRandomNumber = () => 0.5 - Math.random();
 
 const renderFilteredThumbinals = (filteredPhotos) => {
   clearPhotosContainer();
@@ -47,7 +47,7 @@ const filters = (photosData) => {
     activeButton = pressedButton;
 
     switch (pressedButton.id) {
-      case ButtonsId.RANDOM: debounceRender(photosData.toSorted(randomFunc).slice(0, RANDOM_PHOTOS_COUNT));
+      case ButtonsId.RANDOM: debounceRender(photosData.toSorted(getRandomNumber).slice(0, RANDOM_PHOTOS_COUNT));
         break;
       case ButtonsId.DISCUSSED: debounceRender(photosData.toSorted(compareComments));
         break;

@@ -85,7 +85,9 @@ imageUploadInput.addEventListener('change', () => {
   if (matches) {
     const path = URL.createObjectURL(file);
     previewPhoto.src = path;
-    effectsPreviewIcons.forEach((icon) => (icon.style.backgroundImage = `url(${path})`));
+    effectsPreviewIcons.forEach((icon) => {
+      icon.style.backgroundImage = `url(${path})`;
+    });
   } else {
     closeImageEditorModal();
     showNotification('error');
